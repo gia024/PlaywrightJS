@@ -28,14 +28,15 @@ test.describe('Add User with Faker', () => {
     const firstName = faker.person.firstName();
     const middleName = faker.person.middleName();
     const lastName = faker.person.lastName();
-    const username = faker.internet.username({ firstName, lastName });
+    const {generateUsername}= require('unique-username-generator') ;
+    const username = generateUsername("",0,5);
     const email = faker.internet.email({ firstName, lastName });
     const organization = faker.company.name();
     const designation = faker.person.jobTitle();
-    const phone = generateTenDigitPhoneNumber(); // 👈 use your 10-digit number
+    const phone = generateTenDigitPhoneNumber(); //use your 10-digit number
 
-    const role = 'Super Admin';
-    const userGroup = 'Super Admin';
+    const role = 'Viewer';
+    const userGroup = 'National';
 
     // Combine all generated data into a user object
     const userData = {

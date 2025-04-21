@@ -11,5 +11,8 @@
     "@faker-js/faker": "^9.7.0",
     "@playwright/test": "^1.51.1",
     "@types/node": "^22.14.1"
+  },
+  "dependencies": {
+    "unique-username-generator": "^1.4.0"
   }
 }

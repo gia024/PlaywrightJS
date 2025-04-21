@@ -1,5 +1,4 @@
 import { expect } from '@playwright/test';
-import { TIMEOUT } from 'dns';
 
 export default class AddUserPage {
     constructor(page) {
@@ -44,8 +43,10 @@ export default class AddUserPage {
 
         await this.organizationInput.fill(userData.organization);
         await this.designationInput.fill(userData.designation);
-        await this.page.waitForTimeout(10000); // Waits for 10 seconds
+
         await this.phoneInput.fill(userData.phone);
+        await this.page.getByRole("button",{name:"Save"}).click()
+
     }
 
     async submitForm() {
@@ -53,6 +54,6 @@ export default class AddUserPage {
     }
 
     async expectSuccess() {
-        await expect(this.page.getByText('User created successfully')).toBeVisible();
+        await expect(this.page.getByText('New user added successfully.')).toBeVisible();
     }
 }
