@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
-import LoginPage from '../pages/login'; // Make sure this file exists
-import AddCategoryPage from '../pages/add_category'; // Our AddCategoryPage class
-import { generateRandomString, generateRandomNumber } from '../fixtures/custom-fixtures'; // Utilities to generate data
-import env from '../fixtures/env'; // Environment variables like login credentials
+import LoginPage from '../pages/login'; 
+import AddCategoryPage from '../pages/add_category'; 
+import { generateRandomString, generateRandomNumber } from '../fixtures/custom-fixtures'; 
+import env from '../fixtures/env';
 
 test.describe('Add category', () => {
   let loginPage;
@@ -25,7 +25,7 @@ test.describe('Add category', () => {
     // Initialize Add Category page object after successful login
     addCategoryPage = new AddCategoryPage(page);
 
-    // Optional: Ensure that login is successful by checking URL or dashboard element
+    // Ensure that login is successful by checking URL or dashboard element
     await expect(page).not.toHaveURL('https://pin-dev.naxadev.com/login');
   });
 

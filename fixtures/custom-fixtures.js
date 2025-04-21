@@ -22,11 +22,11 @@ function generateRandomString(length){
   return result;
 }
 
-function generateRandomNumber(){
-  let result = '';
- const ranNum = Math.floor(Math.random() * 10000);
-  return result;
+function generateRandomNumber() {
+  const ranNum = Math.floor(Math.random() * 10000);
+  return ranNum.toString().padStart(4, '0'); // ensures it's always 4 digits
 }
+
 
 module.exports = {
   generateTenDigitPhoneNumber,
