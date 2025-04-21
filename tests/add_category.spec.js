@@ -1,36 +1,48 @@
-import {test, expect} from '@playwright/test';
-import LoginPage from '../pages/login';
-import { generateRandomString } from '../fixtures/custom-fixtures';
-import { generateRandomNumber } from '../fixtures/custom-fixtures';
-import env from '../fixtures/env';
+import { test, expect } from '@playwright/test';
+import LoginPage from '../pages/login'; // Make sure this file exists
+import AddCategoryPage from '../pages/add_category'; // Our AddCategoryPage class
+import { generateRandomString, generateRandomNumber } from '../fixtures/custom-fixtures'; // Utilities to generate data
+import env from '../fixtures/env'; // Environment variables like login credentials
 
-test.describe('Add category', () =>{
-    let loginPage;
-    let addCategoryPage;
+test.describe('Add category', () => {
+  let loginPage;
+  let addCategoryPage;
+  let page; // Global page object for use in test
 
-    test.beforeAll(async ({browser})=>{
-        const context = await browser.newContext();
-        const page = await context.newPage();
-        loginPage = new LoginPage(page);
+  // This runs once before all tests in this block
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext();
+    page = await context.newPage();
 
-        await loginPage.goto();
-        const {validemail, validpassword} = env.loginCredentials;
-        await loginPage.login(validemail, validpassword);
+    // Initialize login page and perform login
+    loginPage = new LoginPage(page);
+    await loginPage.goto();
 
-        await expect(page).toHaveURL('https://pin-dev.naxadev.com/login');
+    // Extract email and password from env file
+    const { validemail, validpassword } = env.loginCredentials;
+    await loginPage.login(validemail, validpassword);
 
-    });
-    
-    test('Add Category', async () => {
-        const categoryNameEn = generateRandomString(7);
-        const categoryNameNe = generateRandomString(7);
-        const orderNum = generateRandomNumber();
+    // Initialize Add Category page object after successful login
+    addCategoryPage = new AddCategoryPage(page);
 
-        const categoryData ={
-        categoryNameEn,
-        categoryNameNe,
-        orderNum
-        }
-    });
+    // Optional: Ensure that login is successful by checking URL or dashboard element
+    await expect(page).not.toHaveURL('https://pin-dev.naxadev.com/login');
+  });
 
-})
+  // Main test: add a new category
+  test('Add Category', async () => {
+    // Create test data
+    const categoryData = {
+      nameEn: generateRandomString(7), 
+      nameNe: generateRandomString(7),
+      order: generateRandomNumber() 
+    };
+
+    // Navigate to form and submit category
+    await addCategoryPage.navigateToAddCategoryForm();
+    await addCategoryPage.fillCategoryForm(categoryData);
+
+    // Optional check: confirm that the new category appears on the page
+    await expect(page.getByText(categoryData.nameEn)).toBeVisible();
+  });
+});
