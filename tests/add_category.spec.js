@@ -42,7 +42,6 @@ test.describe('Add category', () => {
     await addCategoryPage.navigateToAddCategoryForm();
     await addCategoryPage.fillCategoryForm(categoryData);
 
-    // Optional check: confirm that the new category appears on the page
     await expect(page.getByText(categoryData.nameEn)).toBeVisible();
   });
 });
