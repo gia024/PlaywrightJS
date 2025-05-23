@@ -1,50 +1,69 @@
+// tests/login.spec.js
 import { test, expect } from '@playwright/test';
-import LoginPage from '../pages/login';
-import env from '../fixtures/env';
-import faker from '@faker-js/faker';
+import LoginPage from '../pages/login.js';
+import env from '../fixtures/env.js';
 
 test.describe('Login Tests', () => {
   let loginPage;
+  let page;
+  let context;
 
-  test.beforeAll(async ({ browser }) => {
-    const context = await browser.newContext();
-    const page = await context.newPage();
+  test.beforeEach(async ({ browser }) => {
+    context = await browser.newContext();
+    page = await context.newPage();
     loginPage = new LoginPage(page);
-    await loginPage.goto();
+    await loginPage.goto(env.baseURL);
   });
-  
+
+  test.afterEach(async () => {
+    await context.close();
+  });
+
   test('Login with valid credentials', async () => {
     const { validemail, validpassword } = env.loginCredentials;
     await loginPage.login(validemail, validpassword);
-    await expect(loginPage.page).not.toHaveURL('https://pin-dev.naxadev.com/'); 
+    
+    // Check if the URL has changed to indicate a successful login
+    await expect(page).not.toHaveURL(`${env.baseURL}login`);
   });
 
   test('Login with invalid password', async () => {
     const { validemail, invalidpassword } = env.loginCredentials;
     await loginPage.login(validemail, invalidpassword);
-    await expect(loginPage.page.locator('text=Invalid credentials')).toBeVisible(); 
+
+    // Expect error message when login fails
+    await expect(page.locator('text=Invalid credentials')).toBeVisible();
   });
 
   test('Login with invalid email', async () => {
     const { invalidemail, validpassword } = env.loginCredentials;
     await loginPage.login(invalidemail, validpassword);
-    await expect(loginPage.page.locator('text=Invalid credentials')).toBeVisible();
+
+    // Expect error message when login fails
+    await expect(page.locator('text=Invalid credentials')).toBeVisible();
   });
 
   test('Login with empty email and password', async () => {
     await loginPage.login('', '');
-    await expect(loginPage.page.locator('text=Email is required')).toBeVisible(); 
+
+    // Check for validation messages
+    await expect(page.locator('text=Email is required')).toBeVisible();
+    await expect(page.locator('text=Password is required')).toBeVisible();
   });
 
   test('Login with empty email', async () => {
-    const { validpassword } = env.loginCredentials
+    const { validpassword } = env.loginCredentials;
     await loginPage.login('', validpassword);
-    await expect(loginPage.page.locator('text=Email is required')).toBeVisible(); 
+
+    // Check for email required validation message
+    await expect(page.locator('text=Email is required')).toBeVisible();
   });
 
   test('Login with empty password', async () => {
     const { validemail } = env.loginCredentials;
     await loginPage.login(validemail, '');
-    await expect(loginPage.page.locator('text=Password is required')).toBeVisible(); 
+
+    // Check for password required validation message
+    await expect(page.locator('text=Password is required')).toBeVisible();
   });
 });

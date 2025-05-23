@@ -1,26 +1,33 @@
-// pages/login.js
-import { expect } from '@playwright/test';
-export class LoginPage {
+class LoginPage {
   constructor(page) {
     this.page = page;
-    this.emailInput =  page.getByRole('textbox', { name: 'Username or email' });
-    this.passwordInput =   page.getByRole('textbox', { name: '********' });
+    this.emailField = page.getByRole('textbox', { name: 'Email/Username' });
+    this.passwordField = page.getByRole('textbox', { name: 'Password' });
+    this.rememberMeCheckbox = page.getByRole('checkbox', { name: 'Remember Me' });
     this.signInButton = page.getByRole('button', { name: 'Sign In' });
   }
-  async goto() {
-    await this.page.goto('https://pin-dev.naxadev.com/login');
+
+  async goto(baseURL) {
+    await this.page.goto(`${baseURL}login`);
   }
-  async login(emailAddress, passwordText) {
-    await this.emailInput.fill(emailAddress);
-    await this.passwordInput.fill(passwordText);
-    await expect(this.signInButton).toBeVisible();
+
+  async login(email, password) {
+    await this.emailField.fill(email);
+    await this.passwordField.fill(password);
+    await this.rememberMeCheckbox.check();
     await this.signInButton.click();
   }
+
+  async switchToEnglishIfNeeded() {
+    try {
+      // Wait for the toggle to be visible
+      await this.languageToggle.waitFor({ state: 'visible', timeout: 5000 });
+      await this.languageToggle.click();
+    } catch (e) {
+      // Do nothing if already in English
+      console.error("Language toggle not visible or already in English.");
+    }
+  }
 }
+
 export default LoginPage;
-
-
-
-
-
-

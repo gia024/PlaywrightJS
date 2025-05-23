@@ -27,9 +27,19 @@ function generateRandomNumber() {
   return ranNum.toString().padStart(4, '0'); // ensures it's always 4 digits
 }
 
+const devnagri = 'कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसहक्षत्रज्ञ';
+function generateRandomDevnagri(length) {
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * devnagri.length);
+    result += devnagri.charAt(randomIndex);
+  }
+  return result;
+}
 
 module.exports = {
   generateTenDigitPhoneNumber,
   generateRandomString,
-  generateRandomNumber
+  generateRandomNumber,
+  generateRandomDevnagri
 };
