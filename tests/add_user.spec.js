@@ -88,7 +88,7 @@ test.describe.serial('User CRUD: Add, Edit, Delete', () => {
   // Click Save button
   await page.locator('button[data-slot="button"]:has-text("Save")').click();
 
-  await page.waitForTimeout(10000);
+  await page.waitForTimeout(1000);
 
   // Update shared data
   sharedUserData.organization = newOrganization;
