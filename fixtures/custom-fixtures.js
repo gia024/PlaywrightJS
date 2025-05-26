@@ -37,9 +37,15 @@ function generateRandomDevnagri(length) {
   return result;
 }
 
+function generateRandomONum() {
+  const ranNum = Math.floor(Math.random() * 500); // generates number from 0 to 499
+  return ranNum.toString().padStart(3, '0'); // ensures it's always 3 digits
+}
+
 module.exports = {
   generateTenDigitPhoneNumber,
   generateRandomString,
   generateRandomNumber,
-  generateRandomDevnagri
+  generateRandomDevnagri,
+  generateRandomONum
 };

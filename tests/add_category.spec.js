@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import LoginPage from '../pages/login'; 
 import AddCategoryPage from '../pages/add_category'; 
-import { generateRandomString, generateRandomNumber } from '../fixtures/custom-fixtures'; 
+import { generateRandomString, generateRandomDevnagri, generateRandomONum } from '../fixtures/custom-fixtures'; 
 import env from '../fixtures/env';
 
 test.describe('Add category', () => {
@@ -31,11 +31,13 @@ test.describe('Add category', () => {
 
   // Main test: add a new category
   test('Add Category', async () => {
+    await page.getByText('EN', { exact: true }).click();
+
     // Create test data
     const categoryData = {
       nameEn: generateRandomString(7), 
-      nameNe: generateRandomString(7),
-      order: generateRandomNumber() 
+      nameNe: generateRandomDevnagri(7),
+      order: generateRandomONum() 
     };
 
     // Navigate to form and submit category
